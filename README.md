@@ -6,5 +6,5 @@
 
 TODO:
 
-- [ ] Implement make file
+- [x] Implement make file
 - [ ] Automate Jenkins setup via JCasC
