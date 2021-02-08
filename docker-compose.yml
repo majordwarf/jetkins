@@ -1,22 +1,32 @@
 version: '3'
 services:
-master:
-  build: ./jenkins-master
-  ports:
-    - "50000:50000"
+  master:
+    build: ./jenkins-master
+    ports:
+      - "50000:50000"
+    volumes:
+      - jenkins-log:/var/log/jenkins
+      - jenkins-data:/var/jenkins_home
+    networks:
+      - jenkins-net
+  nginx:
+    build: ./jenkins-nginx
+    ports:
+      - "80:80"
+    networks:
+      - jenkins-net
+  agent:
+    build: ./jenkins-agent
+  proxy:
+    build: ./docker-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      jenkins-net:
+        aliases:
+          - proxy1
   volumes:
-    - jenkins-log:/var/log/jenkins
-    - jenkins-data:/var/jenkins_home
+    jenkins-log:
+    jenkins-data:
   networks:
-    - jenkins-net
-nginx:
-  build: ./jenkins-nginx
-  ports:
-    - "80:80"
-  networks:
-    - jenkins-net
-volumes:
-  jenkins-log:
-  jenkins-data:
-networks:
-  jenkins-net:
+    jenkins-net:
